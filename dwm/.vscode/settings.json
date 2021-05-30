@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "xproto.h": "c",
+        "appearance.c": "cpp",
+        "random": "c"
+    }
+}
