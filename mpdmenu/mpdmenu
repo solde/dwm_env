@@ -1,0 +1,122 @@
+#!/bin/bash
+MPC="mpc --quiet -p 6600 "
+
+# max height for vertical menu
+height=20
+
+playlists_file="/home/solde/.config/dwm/mpdmenu/playlists.conf"
+
+DMENU() {
+    # Vertical menu if $3 is given
+    echo -e "$1" | dmenu -nb "#383c4a" -nf "#ffffff" -sb "#5294e2" -h 23 -fn "Fira Sa ns-11" -i -b -p "$2" ${3:+"-l" "$3"}
+}
+
+get_playlist() {
+    $MPC -f "%position% - %artist% - %album% - %title%" playlist
+}
+
+select_from() {
+    DMENU "$1" "Select $2" $height
+}
+
+add() {
+    song=""
+    song=$(DMENU "" "Song Name: ")
+    if [ "$song" != "" ]
+    then
+        $MPC add $(youtube-dl --default-search "ytsearch" -g -f 140 $song | head -n 1) 
+    fi
+}
+
+URL() {
+    song=""
+    song=$(DMENU "" "Youtube URL: ")
+    if [ "$song" != "" ]
+    then
+        $MPC add $(youtube-dl -g -f 140 $song) 
+    fi
+}
+
+remove() {
+    local playlist=$(get_playlist)
+    local song=$(select_from "$playlist" "song")
+
+    [ -n "$song" ] && $MPC del "${song%%\ *}"
+}
+
+jump() {
+    local playlist=$(get_playlist)
+    local song=$(select_from "$playlist" "song")
+
+    [ -n "$song" ] && $MPC play "${song%%\ *}"
+}
+
+toggle(){
+    $MPC toggle
+}
+
+play(){
+    $MPC play
+}
+
+pause(){
+    $MPC pause
+}
+
+mpc_stop(){
+    $MPC stop
+}
+
+next(){
+    $MPC next
+}
+
+prev(){
+    $MPC prev
+}
+
+shuffle(){
+    $MPC shuffle
+}
+
+playlists(){
+    lists=$(cat $(echo "$playlists_file") | awk -F ", " '{print $1}')
+    action=$(DMENU "$lists" "Select a playlist: ")
+    url=$(cat ~/.config/dwm/mpdmenu/playlists.conf | grep "$action" | awk -F ", " '{print $2}')
+    $MPC add $(youtube-dl -g -f 140 "$url") 
+}
+
+newPlaylsit(){
+    name=$(DMENU "" "Name: ")
+    url=$(DMENU "" "URL: ")
+    echo "$name, $url" >> "$playlists_file"
+}
+
+if [ $# -gt 0 ]
+then
+    $MPC $*
+    exit 0
+else
+    while true; do
+        action=$(DMENU "Toggle\nAdd\nPlaylists\nURL\nNext\nPrev\nShuffle\nAdd Playlist\nRemove\nJump\nPlay\nPause\nStop\nClear" "Do you want to")
+        case $action in
+            Clear) $MPC clear;;
+            Add) add;;
+            URL) URL;;
+            Playlists) playlists;;
+            Remove) remove;;
+            Shuffle) shuffle;;
+            Jump) jump;;
+            Pause) pause;;
+            Toggle) toggle;;
+            Play) play;;
+            Stop) mpc_stop;;
+            Next) next;;
+            Prev) prev;;
+            "Add Playlist") newPlaylsit;;
+            "") exit 0;;
+        esac
+    done
+    exit 0
+fi
+exit 0
