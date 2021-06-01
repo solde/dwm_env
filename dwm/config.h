@@ -14,8 +14,8 @@ static const unsigned int snap      = 24;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int user_bh     		= 20;	 	/* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
-static const char *fonts[]          = { "Fira Sans:size=12" };
-static const char dmenufont[]       = "Fira Sans:size=12";
+static const char *fonts[]          = { "Fira Sans:size=6" };
+static const char dmenufont[]       = "Fira Sans:size=6";
 static const char col_arc1[]        = "#404552";
 static const char col_arc2[]        = "#383c4a";
 static const char col_ard3[]        = "#4b5162";
@@ -53,6 +53,8 @@ static const Layout layouts[] = {
 	{ "[@]",      spiral },
 	{ "[\\]",     dwindle },
 	{ "|+|",      tatami },
+	{ "TTT",      bstack },
+	{ "===",      bstackhoriz },
 	{ NULL,       NULL },
 };
 
@@ -78,7 +80,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", "Ubuntu-10", "-nb", col_arc2, "-nf", col_white, "-sb", col_arc4, "-sf", col_white, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", "Fira Sans-6", "-nb", col_arc2, "-nf", col_white, "-sb", col_arc4, "-sf", col_white, NULL };
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *web[]  = { "chromium", NULL };
 static const char *gimp[]  = { "gimp", NULL };
@@ -128,6 +130,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_r,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_r,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_y,      setlayout,      {.v = &layouts[5]} },
+	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[6]} },
+	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  cyclelayout,    {.i = +1} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
