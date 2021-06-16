@@ -4,6 +4,9 @@
 #include "fibonacci.c"
 #include "tatami.c"
 
+/* Defines */
+#define NUMCOLORS       17
+
 /* Patches*/
 void movestack(const Arg *arg);
 
@@ -11,21 +14,56 @@ void movestack(const Arg *arg);
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int gappx     = 6;        /* gap pixel between windows */
 static const unsigned int snap      = 24;       /* snap pixel */
+static const unsigned int systraypinning = 1;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systrayonleft = 0;   	/* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systrayspacing = 2;   /* systray spacing */
+static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
+static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int user_bh     		= 20;	 	/* 0 means that dwm will calculate bar height, >= 1 means dwm will user_bh as bar height */
-static const char *fonts[]          = { "Fira Sans:size=6" };
-static const char dmenufont[]       = "Fira Sans:size=6";
-static const char col_arc1[]        = "#404552";
+static const char *fonts[]          = { "Fira Sans:size=12" };
+static const char dmenufont[]       = "Fira Sans:size=12";
+
+/*static const char col_arc1[]        = "#404552";
 static const char col_arc2[]        = "#383c4a";
 static const char col_ard3[]        = "#4b5162";
 static const char col_arc4[]        = "#5294e2";
 static const char col_arc5[]        = "#7c818c";
 static const char col_white[]	    = "#ffffff";
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
+	//               fg         bg         border   
 	[SchemeNorm] = { col_white, col_arc2, col_arc5 },
 	[SchemeSel]  = { col_white, col_arc2, col_arc4 },
+};*/
+
+
+static const char gruvbox_bg[] = "#282828";
+static const char gruvbox_bg2[] = "#1d2021";
+static const char gruvbox_fg[] = "#ebdbb2";
+static const char gruvbox_br_act[] = "#d79921";
+static const char gruvbox_br_in[] = "#a89984";
+static const char gruvbox_ur[] = "#fe8019";
+
+static const char *colors[][3] = {
+    //               fg         bg         border 
+    [SchemeNorm] = { gruvbox_fg , gruvbox_bg2, gruvbox_br_in },        /* [0]  01 - Client normal */
+    [SchemeSel]  = { gruvbox_fg, gruvbox_bg2, gruvbox_br_act },        /* [1]  02 - Client selected */
+//  { "#83a598", "#fb4934", "#282828" },        /* [2]  03 - Client urgent */
+//  { "#83a598", "#83a598", "#282828" },        /* [3]  04 - Client occupied */
+//  { "#282828", "#fb4934", "#282828" },        /* [4]  05 - Red */
+//  { "#282828", "#fabd2f", "#282828" },        /* [5]  06 - Yellow */
+//  { "#282828", "#b8bb26", "#282828" },        /* [6]  07 - Green */
+//  { "#282828", "#928374", "#282828" },        /* [7]  08 - Dark grey */
+//  { "#282828", "#d5c4a1", "#282828" },        /* [8]  09 - Light grey */
+//  { "#928374", "#928374", "#282828" },        /* [9]  0A - Bar normal*/
+//  { "#3c3836", "#a89985", "#282828" },        /* [10] 0B - Bar selected*/
+//  { "#fb4934", "#fb4934", "#282828" },        /* [11] 0C - Bar urgent*/
+//  { "#928374", "#458588", "#282828" },        /* [12] 0D - Bar occupied*/
+//  { "#3c3836", "#3c3836", "#282828" },        /* [13] 0E - Tag normal*/
+//  { "#83a598", "#83a598", "#282828" },        /* [14] 0F - Tag selected*/
+//  { "#fb4934", "#fb4934", "#282828" },        /* [15] 10 - Tag urgent*/
+//  { "#3c3836", "#928374", "#282828" },        /* [16] 11 - Tag occupied*/
 };
 
 /* tagging */
@@ -80,7 +118,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", "Fira Sans-6", "-nb", col_arc2, "-nf", col_white, "-sb", col_arc4, "-sf", col_white, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", "Fira Sans-12", "-nb", gruvbox_bg2, "-nf", gruvbox_fg, "-sb", gruvbox_br_act, "-sf", gruvbox_fg, NULL };
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *web[]  = { "chromium", NULL };
 static const char *gimp[]  = { "gimp", NULL };
@@ -94,7 +132,7 @@ static const char *screenshot[]  = { "escrotum", "-s", "-C" };
 static const char *lockscreen[]  = { "betterlockscreen", "-l", "dim" };
 static const char *pcmanfm[]  = { "pcmanfm", NULL};
 static const char *calculator[]  = { "galculator", NULL};
-static const char *whatsapp[]  = { "whatsapp", NULL};
+static const char *whatsapp[]  = { "whatsdesk", NULL};
 static const char *volup[]  = { "amixer", "-q", "-D", "pulse", "sset", "Master", "5%+", "unmute"};
 static const char *voldown[]  = { "amixer", "-q", "-D", "pulse", "sset", "Master", "5%-", "unmute"};
 static const char *volmute[]  = { "amixer", "-q", "-D", "pulse", "sset", "Master", "toggle"};
