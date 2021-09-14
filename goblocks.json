@@ -10,12 +10,6 @@
             "timer": "10s"          
         },
 		{
-            "prefix":"  ",
-            "updateSignal": "40",
-            "command": "echo \"$(cat /sys/class/power_supply/BAT0/capacity)% $(cat /sys/class/power_supply/BAT0/status | awk '{print substr($1, 0, 1)}')\"",
-            "timer": "1s"          
-        },
-		{
 			"prefix": " 墳  ",
 			"updateSignal": "36",
 			"command": "amixer get Master | awk ' /Left:/ {printf(\"%s %s\"), $5, $6}' | sed -e 's\/\\]\/\/g' -e 's\/\\[\/\/g'",

@@ -2663,13 +2663,16 @@ zoom(const Arg *arg)
 void
 autoStart(void){
 	system("autorand -c");
-	system("~/.fehbg &");
 	system("picom &");
+	system("~/.fehbg &");
 	system("synclient HorizEdgeScroll=1 VertEdgeScroll=1 VertScrollDelta=-111");
 	system("xset -dpms");
 	system("xset -dpms");
 	system("goblocks &");
 	system("mpd &");
+    system("blueman-applet &");
+    system("nm-applet &");
+    system("cbatticon &");
 }
 
 int

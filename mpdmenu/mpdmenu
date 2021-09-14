@@ -4,11 +4,11 @@ MPC="mpc --quiet -p 6600 "
 # max height for vertical menu
 height=20
 
-playlists_file="/home/david/.config/dwm_env/mpdmenu/playlists.conf"
+playlists_file="~/.config/dwm/mpdmenu/playlists.conf"
 
 DMENU() {
     # Vertical menu if $3 is given
-    echo -e "$1" | dmenu -nb "#383c4a" -nf "#ffffff" -sb "#5294e2" -h 23 -fn "Fira Sa ns-6" -i -b -p "$2" ${3:+"-l" "$3"}
+    echo -e "$1" | dmenu -nb "#1d2021" -nf "#dbdbb2" -sb "#d65d0e" -h 23 -fn "Fira Sans-9" -i -b -p "$2" ${3:+"-l" "$3"}
 }
 
 get_playlist() {
@@ -82,7 +82,7 @@ shuffle(){
 playlists(){
     lists=$(cat $(echo "$playlists_file") | awk -F ", " '{print $1}')
     action=$(DMENU "$lists" "Select a playlist: ")
-    url=$(cat ~/.config/dwm/mpdmenu/playlists.conf | grep "$action" | awk -F ", " '{print $2}')
+    url=$(cat /home/solde/.config/dwm/mpdmenu/playlists.conf | grep "$action" | awk -F ", " '{print $2}')
     $MPC add $(youtube-dl -g -f 140 "$url") 
 }
 
